@@ -1,7 +1,7 @@
 import logging
 from typing import Union
 from calculator_module import Calculator, ScientificCalculator
-import art
+from art import text2art
 
 logging.basicConfig(filename="calculator.log", level=logging.DEBUG, format="%(asctime)s:%(levelname)s:%(message)s")
 
@@ -27,22 +27,22 @@ def get_input(prompt: str, input_type: type = float) -> Union[int, float]:
             logging.error("Invalid user input: " + str(e))
             print("Invalid input, please try again.")
 
-def perform_operation(calculate: Union[Calculator, ScientificCalculator], operation: int) -> None:
-    while operation < 1 or (operation > 4 and not isinstance(calculate, ScientificCalculator)) or (operation > 9 and isinstance(calculate, ScientificCalculator)):
+def perform_operation(calculator: Union[Calculator, ScientificCalculator], operation: int) -> None:
+    while operation < 1 or (operation > 4 and not isinstance(calculator, ScientificCalculator)) or (operation > 9 and isinstance(calculator, ScientificCalculator)):
         logging.error("Invalid operation selected.")
         print("Invalid operation selected, please try again.")
         operation = get_input("Enter operation number: ")
 
     operations = {
-    1: calculate.add,
-    2: calculate.subtract,
-    3: calculate.multiply,
-    4: calculate.divide,
-    5: calculate.power if isinstance(calculate, ScientificCalculator) else None,
-    6: calculate.sqrt if isinstance(calculate, ScientificCalculator) else None,
-    7: calculate.sin if isinstance(calculate, ScientificCalculator) else None,
-    8: calculate.cos if isinstance(calculate, ScientificCalculator) else None,
-    9: calculate.tan if isinstance(calculate, ScientificCalculator) else None
+    1: calculator.add,
+    2: calculator.subtract,
+    3: calculator.multiply,
+    4: calculator.divide,
+    5: calculator.power if isinstance(calculator, ScientificCalculator) else None,
+    6: calculator.sqrt if isinstance(calculator, ScientificCalculator) else None,
+    7: calculator.sin if isinstance(calculator, ScientificCalculator) else None,
+    8: calculator.cos if isinstance(calculator, ScientificCalculator) else None,
+    9: calculator.tan if isinstance(calculator, ScientificCalculator) else None
     }
 
     operation_func = operations.get(operation)
@@ -61,22 +61,22 @@ def main() -> None:
     logging.info("Program started.")
     while True:
         try:
-            # print("Number Cruncher")
-            print(text2art("Number Cruncher", font="rnd-large"))
+            Art = text2art("Welcome!","random")
+            print(Art)
             print("Select a calculator:")
-            print("1. Basic Calculator")
-            print("2. Scientific Calculator")
-            print("3. Quit")
-            calc_type = get_input("Enter calculator type: ")
-            choice = calc_type
+            print("1. Press 1 Basic Calculator")
+            print("2. Press 2 Scientific Calculator")
+            print("3. Press 3 to exit")
+            calculator_type = get_input("Enter calculator type: ")
+            choice = calculator_type
             if choice == 1:
-                num1 = get_input("Enter first number: ")
-                num2 = get_input("Enter second number: ")
-                calc = Calculator(num1, num2)
+                number_1 = get_input("Enter first number: ")
+                number_2 = get_input("Enter second number: ")
+                calculator = Calculator(number_1, number_2)
             elif choice == 2:
-                num1 = get_input("Enter first number: ")
-                num2 = get_input("Enter second number: ")
-                calc = ScientificCalculator(num1, num2)
+                number_1 = get_input("Enter first number: ")
+                number_2 = get_input("Enter second number: ")
+                calculator = ScientificCalculator(number_1, number_2)
             elif choice == 3:
                 logging.info("Programe ended.")
                 print("Goodbye!")
@@ -86,13 +86,13 @@ def main() -> None:
                 logging.error("Invalid calculator type selected.")
                 continue
             try:
-                show_operations(calc)
+                show_operations(calculator)
             except UnboundLocalError:
                 print("Error: Calculator variable not assigned.")
                 logging.error("Unallocated calculation type")
                 continue
             operation = get_input("Enter operation number: ")
-            perform_operation(calc, operation)
+            perform_operation(calculator, operation)
         except Exception as e:
             print("An error occurred, please try again.")
             logging.exception("An error occurred: " + str(e))
